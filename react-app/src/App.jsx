@@ -52,7 +52,7 @@ export default function App() {
   const { locked, unlock, lock } = usePinLock();
 
   if (locked) {
-    return <PinLock onUnlock={unlock} onSkip={unlock} />;
+    return <PinLock onUnlock={unlock} />;
   }
 
   return (

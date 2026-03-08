@@ -29,12 +29,10 @@ const PAD = [
 
 export function usePinLock() {
   const [locked, setLocked] = useState(() => {
-    // If user manually locked, always require unlock (even without a PIN)
-    if (sessionStorage.getItem(LOCK_FLAG) === '1') return true;
-    // No PIN set and not manually locked → never lock
-    if (!getStoredPin()) return false;
-    // PIN is set: locked unless this session was already unlocked
-    return sessionStorage.getItem(SESSION_KEY) !== '1';
+    // Already unlocked this session → stay unlocked
+    if (sessionStorage.getItem(SESSION_KEY) === '1') return false;
+    // Every fresh session (new tab, new browser, new device) starts locked
+    return true;
   });
 
   const unlock = () => {
@@ -226,12 +224,7 @@ export default function PinLock({ onUnlock, onSkip }) {
           {mode === 'enter' ? 'Unlock' : mode === 'setup' ? 'Next →' : 'Confirm PIN'}
         </button>
 
-        {/* Skip (only on first setup) */}
-        {mode === 'setup' && (
-          <button className="btn-text pin-skip" onClick={onSkip}>
-            Skip — use without PIN
-          </button>
-        )}
+        {/* No skip — PIN setup is required */}
       </div>
     </div>
   );

@@ -2,9 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 
 const PIN_KEY = 'dashboard_pin';
 const SESSION_KEY = 'dashboard_unlocked';
-const LOCK_FLAG  = 'dashboard_locked';   // set when user manually locks
+const LOCK_FLAG  = 'dashboard_locked';
 const MAX_ATTEMPTS = 5;
-const LOCKOUT_DURATION = 30000; // 30 seconds
+const LOCKOUT_DURATION = 30000;
+
+// Owner code hash — only the owner can set up a PIN for the first time
+// btoa('pdash::owner::hackbyme134')
+const OWNER_HASH = 'cGRhc2g6Om93bmVyOjpoYWNrYnltZTEzNA==';
+function verifyOwnerCode(code) {
+  try { return btoa('pdash::owner::' + code) === OWNER_HASH; } catch { return false; }
+}
 
 // Simple hash using btoa + salt so PIN isn't stored as plain text
 function hashPin(pin) {
@@ -50,9 +57,10 @@ export function usePinLock() {
   return { locked, unlock, lock };
 }
 
-export default function PinLock({ onUnlock, onSkip }) {
+export default function PinLock({ onUnlock }) {
   const hasPin = !!getStoredPin();
-  const [mode, setMode] = useState(hasPin ? 'enter' : 'setup'); // 'enter' | 'setup' | 'confirm'
+  // If no PIN exists, start at 'owner' mode (owner code required before setup)
+  const [mode, setMode] = useState(hasPin ? 'enter' : 'owner'); // 'owner' | 'enter' | 'setup' | 'confirm'
   const [pin, setPin] = useState('');
   const [setupPin, setSetupPin] = useState('');
   const [error, setError] = useState('');
@@ -60,6 +68,9 @@ export default function PinLock({ onUnlock, onSkip }) {
   const [attempts, setAttempts] = useState(0);
   const [lockedUntil, setLockedUntil] = useState(null);
   const [now, setNow] = useState(Date.now());
+  const [ownerCode, setOwnerCode] = useState('');
+  const [ownerError, setOwnerError] = useState('');
+  const [ownerShake, setOwnerShake] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 1000);
@@ -72,6 +83,19 @@ export default function PinLock({ onUnlock, onSkip }) {
   const triggerShake = () => {
     setShake(true);
     setTimeout(() => setShake(false), 500);
+  };
+
+  const handleOwnerVerify = () => {
+    if (verifyOwnerCode(ownerCode)) {
+      setOwnerCode('');
+      setOwnerError('');
+      setMode('setup');
+    } else {
+      setOwnerError('Incorrect code. Access denied.');
+      setOwnerCode('');
+      setOwnerShake(true);
+      setTimeout(() => setOwnerShake(false), 500);
+    }
   };
 
   const handleKey = useCallback((k) => {
@@ -144,12 +168,14 @@ export default function PinLock({ onUnlock, onSkip }) {
   }, [handleKey, handleSubmit]);
 
   const dots = Array.from({ length: Math.max(4, pin.length || (mode === 'confirm' ? setupPin.length : 4)) });
-  const title = mode === 'enter' ? 'Enter PIN' : mode === 'setup' ? 'Set up PIN' : 'Confirm PIN';
+  const title = mode === 'enter' ? 'Enter PIN' : mode === 'setup' ? 'Set up PIN' : mode === 'confirm' ? 'Confirm PIN' : 'Private Dashboard';
   const subtitle = mode === 'enter'
     ? 'Enter your PIN to access the dashboard'
     : mode === 'setup'
     ? 'Choose a 4–6 digit PIN to protect your dashboard'
-    : `Re-enter your ${setupPin.length}-digit PIN to confirm`;
+    : mode === 'confirm'
+    ? `Re-enter your ${setupPin.length}-digit PIN to confirm`
+    : 'This dashboard is private. Owner access only.';
 
   return (
     <div className="pin-overlay">
@@ -176,12 +202,44 @@ export default function PinLock({ onUnlock, onSkip }) {
         <h2 className="pin-title">{title}</h2>
         <p className="pin-subtitle">{subtitle}</p>
 
-        {/* PIN dots */}
-        <div className={`pin-dots${shake ? ' pin-shake' : ''}`}>
-          {dots.map((_, i) => (
-            <div key={i} className={`pin-dot${i < pin.length ? ' filled' : ''}`} />
-          ))}
-        </div>
+        {/* ── Owner code gate ── */}
+        {mode === 'owner' && (
+          <div className={`owner-gate${ownerShake ? ' pin-shake' : ''}`}>
+            <div className="owner-gate-icon">
+              <svg width="36" height="36" fill="none" viewBox="0 0 24 24" strokeWidth="1.5">
+                <rect x="3" y="11" width="18" height="12" rx="2" stroke="#ef4444"/>
+                <path d="M7 11V7a5 5 0 0110 0v4" stroke="#ef4444"/>
+                <circle cx="12" cy="17" r="1.5" fill="#ef4444"/>
+              </svg>
+            </div>
+            <p className="owner-gate-msg">PIN setup requires the owner access code.</p>
+            <input
+              className="inp owner-code-input"
+              type="password"
+              placeholder="Enter owner code..."
+              value={ownerCode}
+              onChange={e => { setOwnerCode(e.target.value); setOwnerError(''); }}
+              onKeyDown={e => e.key === 'Enter' && handleOwnerVerify()}
+              autoFocus
+            />
+            {ownerError && <div className="pin-error" style={{ marginTop: 6 }}>{ownerError}</div>}
+            <button
+              className="btn btn-primary pin-submit-btn"
+              onClick={handleOwnerVerify}
+              disabled={ownerCode.length < 1}
+            >
+              Verify
+            </button>
+          </div>
+        )}
+
+        {/* ── PIN dots (enter / setup / confirm modes) ── */}
+        {mode !== 'owner' && (<>
+          <div className={`pin-dots${shake ? ' pin-shake' : ''}`}>
+            {dots.map((_, i) => (
+              <div key={i} className={`pin-dot${i < pin.length ? ' filled' : ''}`} />
+            ))}
+          </div>
 
         {/* Error */}
         {isLockedOut ? (
@@ -225,6 +283,7 @@ export default function PinLock({ onUnlock, onSkip }) {
         </button>
 
         {/* No skip — PIN setup is required */}
+        </>)}
       </div>
     </div>
   );

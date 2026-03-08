@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Productivity Dashboard — Abir</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- Loading screen -->
+<div id="loader">
+  <div style="font-size:26px;font-weight:800;color:#f97316">Welcome, Abir!</div>
+  <div class="loader-ring"></div>
+  <div class="loader-text">Loading your workspace...</div>
+</div>
+
+<!-- App shell -->
+<div id="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <span class="sb-logo-text">Dashboard</span>
+    </div>
+
+    <!-- Profile card -->
+    <div class="sb-profile">
+      <div class="sb-avatar">A</div>
+      <div class="sb-profile-info">
+        <div class="sb-profile-name">Abir</div>
+        <div class="sb-profile-role">Freelancer &amp; Developer</div>
+      </div>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-section">Main</div>
+
+      <div class="nav-item active" data-section="overview">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        <span class="sb-label">Overview</span>
+      </div>
+
+      <div class="nav-item" data-section="tasks">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+        </svg>
+        <span class="sb-label">Tasks</span>
+      </div>
+
+      <div class="nav-item" data-section="clients">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+          <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+        </svg>
+        <span class="sb-label">Client Work</span>
+      </div>
+
+      <div class="nav-item" data-section="skills">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+        <span class="sb-label">Skills</span>
+      </div>
+
+      <div class="sb-section">Track</div>
+
+      <div class="nav-item" data-section="attendance">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+        <span class="sb-label">Attendance</span>
+      </div>
+
+      <div class="nav-item" data-section="habits">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span class="sb-label">Habits</span>
+      </div>
+
+      <div class="nav-item" data-section="income">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+        </svg>
+        <span class="sb-label">Income</span>
+      </div>
+
+      <div class="nav-item" data-section="stats">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        <span class="sb-label">Statistics</span>
+      </div>
+
+      <div class="sb-section">Tools</div>
+
+      <div class="nav-item" data-section="pomodoro">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span class="sb-label">Pomodoro</span>
+      </div>
+
+      <div class="nav-item" data-section="notes">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <span class="sb-label">Notes</span>
+      </div>
+    </nav>
+
+    <div class="sb-bottom">
+      <button class="sb-toggle-btn" id="sidebar-toggle" title="Collapse">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/>
+        </svg>
+        <span class="sb-label" style="font-size:12px">Collapse</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div id="main">
+    <header id="topbar">
+      <span id="topbar-title">Daily Overview</span>
+      <div id="topbar-date" class="text-secondary text-sm"></div>
+      <div id="clock"></div>
+    </header>
+
+    <div id="content">
+
+      <!-- OVERVIEW -->
+      <section class="section-panel active" id="sec-overview">
+        <!-- Welcome banner -->
+        <div class="welcome-banner mb-16">
+          <div>
+            <div class="welcome-greeting" id="welcome-greeting">Good morning, Abir! 👋</div>
+            <div class="welcome-sub">Freelancer &amp; Developer &nbsp;·&nbsp; <span id="welcome-date"></span></div>
+          </div>
+          <div class="welcome-info">
+            <div class="welcome-badge">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.63A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+              Bangladesh
+            </div>
+            <div class="welcome-badge">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              upwork.com/fl/abir
+            </div>
+          </div>
+        </div>
+
+        <div class="goal-card mb-16">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#f97316" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+          <input id="today-goal" type="text" placeholder="Set your main goal for today..." />
+          <button class="btn btn-primary btn-sm" onclick="App.saveGoal()">Save</button>
+        </div>
+
+        <div class="overview-grid mb-20">
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(249,115,22,.12)">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#f97316" stroke-width="2">
+                <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+              </svg>
+            </div>
+            <div class="stat-value" id="ov-tasks-done">0</div>
+            <div class="stat-label">Tasks Completed Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(59,130,246,.12)">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#3b82f6" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div class="stat-value" id="ov-work-hrs">0</div>
+            <div class="stat-label">Work Hours Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(168,85,247,.12)">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#a855f7" stroke-width="2">
+                <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+              </svg>
+            </div>
+            <div class="stat-value" id="ov-learn-hrs">0</div>
+            <div class="stat-label">Learning Hours Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(34,197,94,.12)">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#22c55e" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+              </svg>
+            </div>
+            <div class="stat-value" id="ov-earnings">$0</div>
+            <div class="stat-label">This Month Earnings</div>
+          </div>
+        </div>
+
+        <div class="card mb-20">
+          <div class="card-title">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Today's Time Log
+            <button class="btn btn-ghost btn-sm" style="margin-left:auto;padding:3px 10px;font-size:11px" onclick="App.timerStopAll()" title="Stop all running timers">Stop All</button>
+          </div>
+          <div id="ov-timer-log">
+            <div class="text-muted text-sm" style="padding:6px 0">No timer sessions yet — press ▶ on any task, skill or project to start tracking.</div>
+          </div>
+        </div>
+
+        <div class="quote-block mb-16" id="daily-quote"></div>
+
+        <div class="card">
+          <div class="card-title">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+              <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Quick Links
+          </div>
+          <div class="grid-4">
+            <a class="quick-link" href="https://www.upwork.com" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06 1.492 0 2.703 1.212 2.703 2.703-.001 1.489-1.212 2.702-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112c-.002 1.406-1.141 2.546-2.547 2.546-1.405 0-2.543-1.14-2.543-2.546V3.492H0v7.112c0 2.914 2.37 5.303 5.281 5.303 2.913 0 5.283-2.389 5.283-5.303v-1.19c.529 1.107 1.182 2.228 1.974 3.221l-1.673 7.873h2.797l1.213-5.71c1.063.679 2.285 1.109 3.686 1.109 3 0 5.439-2.452 5.439-5.45 0-3-2.439-5.439-5.439-5.439z"/></svg>
+              Upwork
+            </a>
+            <a class="quick-link" href="https://mail.google.com" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              Gmail
+            </a>
+            <a class="quick-link" href="https://github.com" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              GitHub
+            </a>
+            <a class="quick-link" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+              YouTube
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ATTENDANCE -->
+      <section class="section-panel" id="sec-attendance">
+        <h2 class="mb-20">Attendance Tracker</h2>
+        <div class="grid-2 gap-16">
+
+          <div class="card att-status-card">
+            <div class="att-status-dot" id="att-dot"></div>
+            <div class="att-status-label" id="att-status-label">Not Started</div>
+            <div class="att-timer-display" id="att-timer">00:00:00</div>
+            <div class="att-timer-sub" id="att-timer-sub">Click Check In to begin</div>
+            <div class="att-buttons">
+              <button class="btn att-btn-checkin"   id="att-btn-checkin"   onclick="App.attCheckIn()">Check In</button>
+              <button class="btn att-btn-break"      id="att-btn-break"     onclick="App.attBreak()"    disabled>Break</button>
+              <button class="btn att-btn-break-end"  id="att-btn-break-end" onclick="App.attBreakEnd()" disabled>Break End</button>
+              <button class="btn att-btn-checkout"   id="att-btn-checkout"  onclick="App.attCheckOut()" disabled>Check Out</button>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-16">
+            <div class="grid-2 gap-12">
+              <div class="stat-card">
+                <div class="stat-label">Check In</div>
+                <div class="stat-value" id="att-checkin-time" style="font-size:22px">--:--</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Check Out</div>
+                <div class="stat-value" id="att-checkout-time" style="font-size:22px">--:--</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Total Work</div>
+                <div class="stat-value text-green" id="att-total-work" style="font-size:22px">0h 0m</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Total Break</div>
+                <div class="stat-value text-orange" id="att-total-break" style="font-size:22px">0h 0m</div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+                  <line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/>
+                  <line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+                </svg>
+                Today's Log
+              </div>
+              <div id="att-log"></div>
+              <div id="att-log-empty" class="empty-state">
+                <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <p>No activity yet. Click Check In to start!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TASKS -->
+      <section class="section-panel" id="sec-tasks">
+        <div class="flex items-center justify-between mb-16">
+          <h2>Task Manager</h2>
+          <button class="btn btn-primary" onclick="App.openTaskModal()">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Task
+          </button>
+        </div>
+        <div class="filter-bar mb-16">
+          <span class="filter-chip active" data-filter="all">All</span>
+          <span class="filter-chip" data-filter="pending">Pending</span>
+          <span class="filter-chip" data-filter="in-progress">In Progress</span>
+          <span class="filter-chip" data-filter="completed">Completed</span>
+          <span class="filter-chip" data-filter="Client Work">Client Work</span>
+          <span class="filter-chip" data-filter="Learning">Learning</span>
+          <span class="filter-chip" data-filter="Personal">Personal</span>
+        </div>
+        <div id="task-list" class="flex flex-col gap-8" style="gap:10px"></div>
+        <div id="task-empty" class="empty-state hidden">
+          <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+          </svg>
+          <p>No tasks yet. Add your first task!</p>
+        </div>
+      </section>
+
+      <!-- CLIENT WORK -->
+      <section class="section-panel" id="sec-clients">
+        <div class="flex items-center justify-between mb-16">
+          <h2>Client Work Tracker</h2>
+          <button class="btn btn-primary" onclick="App.openClientModal()">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Project
+          </button>
+        </div>
+        <div class="card" style="overflow-x:auto">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Client</th><th>Project</th><th>Description</th>
+                <th>Hours</th><th>Payment</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="client-table-body"></tbody>
+          </table>
+          <div id="client-empty" class="empty-state hidden">
+            <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+            </svg>
+            <p>No projects yet. Add your first client project!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section class="section-panel" id="sec-skills">
+        <div class="flex items-center justify-between mb-16">
+          <h2>Skill Learning Tracker</h2>
+          <div class="flex gap-8">
+            <button class="btn btn-ghost btn-sm" onclick="App.openCourseModal()">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+              Add Course
+            </button>
+            <button class="btn btn-primary" onclick="App.openSkillModal()">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Skill
+            </button>
+          </div>
+        </div>
+        <div class="card mb-16">
+          <div id="skills-list"></div>
+          <div id="skills-empty" class="empty-state hidden">
+            <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+            <p>No skills tracked yet. Start learning something!</p>
+          </div>
+        </div>
+        <!-- Courses & Playlists -->
+        <div class="flex items-center justify-between mb-12">
+          <div class="card-title" style="margin-bottom:0">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            Courses &amp; Playlists
+          </div>
+        </div>
+        <div id="courses-list" style="display:flex;flex-direction:column;gap:10px"></div>
+        <div id="courses-empty" class="empty-state hidden">
+          <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>
+          </svg>
+          <p>No courses yet. Add a YouTube playlist or online course!</p>
+        </div>
+      </section>
+
+      <!-- HABITS -->
+      <section class="section-panel" id="sec-habits">
+        <div class="flex items-center justify-between mb-16">
+          <h2>Habit Tracker</h2>
+          <button class="btn btn-primary btn-sm" onclick="App.openHabitModal()">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Habit
+          </button>
+        </div>
+        <div class="card">
+          <div class="flex items-center gap-8 mb-12 text-muted text-sm" style="padding-left:112px">
+            <span style="width:28px;text-align:center">M</span>
+            <span style="width:28px;text-align:center">T</span>
+            <span style="width:28px;text-align:center">W</span>
+            <span style="width:28px;text-align:center">T</span>
+            <span style="width:28px;text-align:center">F</span>
+            <span style="width:28px;text-align:center">S</span>
+            <span style="width:28px;text-align:center">S</span>
+          </div>
+          <div id="habit-list"></div>
+          <div id="habit-empty" class="empty-state hidden">
+            <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <p>No habits yet. Add habits to track!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- INCOME -->
+      <section class="section-panel" id="sec-income">
+        <div class="flex items-center justify-between mb-16">
+          <h2>Income Tracker</h2>
+          <button class="btn btn-primary" onclick="App.openIncomeModal()">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Payment
+          </button>
+        </div>
+        <div class="grid-3 mb-16">
+          <div class="stat-card">
+            <div class="stat-label">This Month</div>
+            <div class="stat-value text-green" id="income-month">$0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Earned</div>
+            <div class="stat-value" id="income-total">$0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Pending Payments</div>
+            <div class="stat-value text-orange" id="income-pending">$0</div>
+          </div>
+        </div>
+        <div class="card" style="overflow-x:auto">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Client</th><th>Amount</th><th>Method</th><th>Date</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="income-table-body"></tbody>
+          </table>
+          <div id="income-empty" class="empty-state hidden">
+            <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+            </svg>
+            <p>No payments recorded yet.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- STATISTICS -->
+      <section class="section-panel" id="sec-stats">
+        <h2 class="mb-16">Weekly Statistics</h2>
+        <div class="grid-4 mb-16">
+          <div class="stat-card">
+            <div class="stat-label">Work Hours (Week)</div>
+            <div class="stat-value" id="stat-work-week">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Learning Hours (Week)</div>
+            <div class="stat-value text-purple" id="stat-learn-week">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Tasks Completed</div>
+            <div class="stat-value text-orange" id="stat-tasks-done">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Earnings</div>
+            <div class="stat-value text-green" id="stat-total-earn">$0</div>
+          </div>
+        </div>
+        <div class="grid-2 gap-16">
+          <div class="card">
+            <div class="card-title">Work Hours - Last 7 Days</div>
+            <div class="chart-wrap"><canvas id="chart-work"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Task Completion by Type</div>
+            <div class="chart-wrap"><canvas id="chart-tasks"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- POMODORO -->
+      <section class="section-panel" id="sec-pomodoro">
+        <h2 class="mb-20">Pomodoro Timer</h2>
+        <div class="grid-2 gap-16">
+          <div class="card" style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:32px 20px">
+            <svg class="pomo-progress-ring" width="180" height="180" viewBox="0 0 180 180">
+              <circle class="ring-track" cx="90" cy="90" r="80" stroke-width="8"/>
+              <circle class="ring-fill" id="pomo-ring" cx="90" cy="90" r="80"
+                stroke-width="8"
+                stroke-dasharray="502.65"
+                stroke-dashoffset="0"
+                transform="rotate(-90 90 90)"/>
+            </svg>
+            <div class="pomo-label" id="pomo-mode-label">WORK SESSION</div>
+            <div class="pomo-display" id="pomo-display">25:00</div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-primary" id="pomo-start" onclick="App.pomoStart()">Start</button>
+              <button class="btn btn-ghost" onclick="App.pomoReset()">Reset</button>
+            </div>
+            <div class="text-muted text-sm" id="pomo-session-count">Sessions today: 0</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Timer Settings</div>
+            <div class="flex flex-col gap-12 mt-8">
+              <div class="form-group">
+                <label class="form-label">Work Duration (min)</label>
+                <input type="number" class="inp" id="pomo-work-dur" value="25" min="1" max="90" style="width:120px"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Break Duration (min)</label>
+                <input type="number" class="inp" id="pomo-break-dur" value="5" min="1" max="30" style="width:120px"/>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="App.pomoApplySettings()" style="width:fit-content">Apply Settings</button>
+            </div>
+            <div class="divider"></div>
+            <div class="card-title mt-8">Today Focus Log</div>
+            <div id="pomo-log" class="flex flex-col gap-8 text-sm text-secondary"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NOTES -->
+      <section class="section-panel" id="sec-notes">
+        <div class="flex items-center justify-between mb-16">
+          <h2>Notes</h2>
+          <span class="text-sm text-muted" id="notes-saved-label"></span>
+        </div>
+        <div class="card">
+          <textarea id="notes-area" class="inp" placeholder="Write anything here... your thoughts, ideas, plans."></textarea>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+
+<div id="task-modal" class="modal-backdrop hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="task-modal-title">Add Task</div>
+      <button class="btn-icon" onclick="App.closeModal('task-modal')">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-form">
+      <div class="form-group">
+        <label class="form-label">Task Name *</label>
+        <input class="inp" id="t-name" type="text" placeholder="What needs to be done?" />
+      </div>
+      <div class="grid-2 gap-12">
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select class="inp" id="t-type">
+            <option>Client Work</option><option>Learning</option><option>Personal</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Priority</label>
+          <select class="inp" id="t-priority">
+            <option>High</option><option selected>Medium</option><option>Low</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-3 gap-12">
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="inp" id="t-status">
+            <option>pending</option><option>in-progress</option><option>completed</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Deadline</label>
+          <input class="inp" id="t-deadline" type="date" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Time</label>
+          <input class="inp" id="t-time" type="time" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="App.closeModal('task-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="App.saveTask()">Save Task</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="client-modal" class="modal-backdrop hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="client-modal-title">Add Project</div>
+      <button class="btn-icon" onclick="App.closeModal('client-modal')">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-form">
+      <div class="grid-2 gap-12">
+        <div class="form-group">
+          <label class="form-label">Client Name *</label>
+          <input class="inp" id="c-client" type="text" placeholder="Client name" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Project Name *</label>
+          <input class="inp" id="c-project" type="text" placeholder="Project name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="inp" id="c-desc" placeholder="What is this project about?"></textarea>
+      </div>
+      <div class="grid-2 gap-12">
+        <div class="form-group">
+          <label class="form-label">Hours Spent</label>
+          <input class="inp" id="c-hours" type="number" min="0" step="0.5" placeholder="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Payment ($)</label>
+          <input class="inp" id="c-payment" type="number" min="0" placeholder="0" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="inp" id="c-status">
+          <option>Pending</option><option>In Progress</option><option>Completed</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="App.closeModal('client-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="App.saveClient()">Save Project</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="skill-modal" class="modal-backdrop hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="skill-modal-title">Add Skill</div>
+      <button class="btn-icon" onclick="App.closeModal('skill-modal')">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-form">
+      <div class="grid-2 gap-12">
+        <div class="form-group">
+          <label class="form-label">Skill Name *</label>
+          <input class="inp" id="s-name" type="text" placeholder="e.g. React, Figma..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Topic Learned</label>
+          <input class="inp" id="s-topic" type="text" placeholder="Latest topic" />
+        </div>
+      </div>
+      <div class="grid-2 gap-12">
+        <div class="form-group">
+          <label class="form-label">Hours Today</label>
+          <input class="inp" id="s-hrs-today" type="number" min="0" step="0.5" placeholder="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Total Hours</label>
+          <input class="inp" id="s-hrs-total" type="number" min="0" step="0.5" placeholder="0" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Progress % (0-100)</label>
+        <input class="inp" id="s-pct" type="number" min="0" max="100" placeholder="0" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="App.closeModal('skill-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="App.saveSkill()">Save Skill</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="course-modal" class="modal-backdrop hidden">
+  <div class="modal" style="width:min(580px,calc(100vw - 32px))">
+    <div class="modal-header">
+      <div class="modal-title" id="course-modal-title">Add Course / Playlist</div>
+      <button class="btn-icon" onclick="App.closeModal('course-modal')">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-form">
+      <div class="form-group">
+        <label class="form-label">Course / Playlist Title *</label>
+        <input class="inp" id="c-title" type="text" placeholder="e.g. React Complete Guide 2026" />
+      </div>
+      <div class="grid-2 gap-12">
+        <div class="form-group">
+          <label class="form-label">Platform</label>
+          <select class="inp" id="c-platform" onchange="App._updateFetchBtn()">
+            <option>YouTube</option><option>Udemy</option><option>Coursera</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Playlist URL (optional)</label>
+          <div class="url-fetch-row">
+            <input class="inp" id="c-url" type="url" placeholder="https://youtube.com/playlist?list=..." oninput="App._updateFetchBtn()" />
+            <button class="btn btn-ghost btn-sm" id="btn-fetch-yt" type="button" onclick="App.fetchYouTubePlaylist()" style="display:none;white-space:nowrap;flex-shrink:0">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+              Auto-fetch
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Linked Skill (optional)</label>
+        <select class="inp" id="c-skill"></select>
+      </div>
+      <div class="form-group">
+        <div class="flex items-center justify-between mb-8">
+          <label class="form-label" style="margin:0">Lessons / Videos</label>
+          <button class="btn btn-ghost btn-sm" type="button" onclick="App.addCourseLessonField()">+ Add Lesson</button>
+        </div>
+        <div id="c-lessons-list" class="flex flex-col" style="gap:7px"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="App.closeModal('course-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="App.saveCourse()">Save Course</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="habit-modal" class="modal-backdrop hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add Habit</div>
+      <button class="btn-icon" onclick="App.closeModal('habit-modal')">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-form">
+      <div class="form-group">
+        <label class="form-label">Habit Name *</label>
+        <input class="inp" id="h-name" type="text" placeholder="e.g. Gym, Reading, Coding..." />
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="App.closeModal('habit-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="App.saveHabit()">Add Habit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="income-modal" class="modal-backdrop hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="income-modal-title">Add Payment</div>
+      <button class="btn-icon" onclick="App.closeModal('income-modal')">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-form">
+      <div class="grid-2 gap-12">
+        <div class="form-group">
+          <label class="form-label">Client Name *</label>
+          <input class="inp" id="i-client" type="text" placeholder="Client name" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Amount ($) *</label>
+          <input class="inp" id="i-amount" type="number" min="0" placeholder="0" />
+        </div>
+      </div>
+      <div class="grid-2 gap-12">
+        <div class="form-group">
+          <label class="form-label">Payment Method</label>
+          <select class="inp" id="i-method">
+            <option>Upwork</option><option>PayPal</option><option>Bank Transfer</option>
+            <option>bKash</option><option>Cash</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input class="inp" id="i-date" type="date" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="inp" id="i-status">
+          <option>Received</option><option>Pending</option><option>Cancelled</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="App.closeModal('income-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="App.saveIncome()">Save Payment</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
